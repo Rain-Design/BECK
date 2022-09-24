@@ -17,6 +17,12 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 --//
 
+--// Assets //--
+local Assets = {
+
+}
+--//
+
 --// Utilities Functions //--
 function Utilities:Create(type, properties, children)
 assert(type, "first argument is required.")
@@ -72,7 +78,7 @@ end
 --//
 
 function Utilities:GetMouseLocation()
-return UserInputService:GetMouseLocation()
+    return UserInputService:GetMouseLocation()
 end
 
 function Utilities:GetXY(GuiObject)
@@ -647,6 +653,8 @@ local Dropdown = Utilities:Create("Frame", {
             ScrollBarThickness = 0,
             ScrollBarImageColor3 = Color3.fromRGB(209, 209, 209),
             BottomImage = "",
+            Active = true,
+            ScrollingEnabled = false,
             TopImage = "",
             Position = UDim2.fromOffset(0, 23),
             ZIndex = 3
@@ -687,6 +695,23 @@ local Dropdown = Utilities:Create("Frame", {
 local DropdownContainer = Dropdown.DropdownFrame.DropdownContainer
 local DropdownButton = Dropdown.DropdownFrame.DropdownButton
 local DropdownIcon = Dropdown.DropdownFrame.DropdownIcon
+
+local Wheel
+
+DropdownContainer.MouseEnter:Connect(function()
+    Wheel = UserInputService.InputChanged:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseWheel then
+            DropdownContainer.CanvasPosition = Vector2.new(0, DropdownContainer.CanvasPosition.Y + (Input.Position.Z > 0 and -27 or 27))
+        end
+    end)
+end)
+
+DropdownContainer.MouseLeave:Connect(function()
+    if Wheel then
+        Wheel:Disconnect()
+        Wheel = nil
+    end
+end)
 
 DropdownContainer.ChildAdded:Connect(function()
     if DropdownY < 81 then
@@ -867,7 +892,7 @@ local Step = Info.Incrementation
 
 for i = 1, 10 do 
     StepFormat = '%.' .. i .. 'f'
-    if (StepFormat:format(Step) == tostring(Step)) then
+    if StepFormat:format(Step) == tostring(Step) then
         break
     end
 end
