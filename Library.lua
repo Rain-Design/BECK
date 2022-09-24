@@ -87,66 +87,18 @@ function Utilities:GetXY(GuiObject)
 	return Px/Max, Py/May
 end
 
+function Utilities:Round(Number, Increment)
+    Increment = 1 / Increment
+
+    return math.round(Number * Increment) / Increment
+end
+
 local ScreenGui = Utilities:Create("ScreenGui", {
     Name = "BECK",
     ZIndexBehavior = Enum.ZIndexBehavior.Global,
     DisplayOrder = 9e9,
     Parent = CoreGui
 })
-
-function Utilities:Tooltip(instance, text)
-    local Tooltip = Utilities:Create("Frame", {
-        Name = "Tooltip",
-        Parent = ScreenGui,
-        AnchorPoint = Vector2.new(.5, .5),
-        Size = UDim2.new(0, 0, 0, 0),
-        BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    }, {
-        Utilities:Create("UICorner", {
-            CornerRadius = UDim.new(0, 4)
-        }),
-        Utilities:Create("TextLabel", {
-            Name = "TooltipText",
-            TextSize = 11,
-            Text = text,
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1, 0, 1, 0)
-        })
-    })
-
-    local Text = Tooltip.TooltipText
-    local TextX = Tooltip.TooltipText.TextBounds.X
-
-    local MousePosition
-    local MouseMove
-
-    local function Update()
-        MousePosition = Utilities:GetMouseLocation()
-        Tooltip.Position = UDim2.new(0, MousePosition.X, 0, MousePosition.Y)
-    end
-
-    instance.MouseEnter:Connect(function()
-        Utilities:Tween(Tooltip, {Size = UDim2.new(0, TextX + 20, 0, 15)}, .125, Enum.EasingStyle.Quint)
-        task.spawn(function()
-        task.wait(.125)
-        if MouseMove then
-            Text.Visible = true
-        end
-        end)
-        MouseMove = Mouse.Move:Connect(function()
-            Update()
-        end)
-    end)
-
-    instance.MouseLeave:Connect(function()
-        Text.Visible = false
-        Utilities:Tween(Tooltip, {Size = UDim2.new(0, 0, 0, 15)}, .125, Enum.EasingStyle.Quint)
-        if MouseMove then
-            MouseMove:Disconnect()
-            MouseMove = nil
-        end
-    end)
-end
 --//
 
 --// Window //--
@@ -668,6 +620,9 @@ Dropdowns.Selected = nil
 
 if Info.MultiSelect then
     Dropdowns.Selected = {}
+    if Info.Flag then
+        Library.Flags[Info.Flag] = Dropdowns.Selected
+    end
 end
 
 local State = false
@@ -909,23 +864,18 @@ if Info.Minimum > Info.Maximum then
 end
 
 local DefaultValue = math.clamp(Info.Default, Info.Minimum, Info.Maximum)
-local Rounded = math.floor((DefaultValue + Info.Incrementation / 2) / Info.Incrementation) * Info.Incrementation
+local Rounded = Utilities:Round(DefaultValue, Info.Incrementation)
 
 local DefaultScale = (Rounded - Info.Minimum) / (Info.Maximum - Info.Minimum)
 
-local StepFormat
+local StepFormat = "%d"
 local Step = Info.Incrementation
 
-if (Step >= 1) then -- Skidded from dollaware :troll:
-    StepFormat = '%d'
-elseif (Step >= 0.1) then
-    StepFormat = '%.1f'
-elseif (Step >= 0.01) then
-    StepFormat = '%.2f'
-elseif (Step >= 0.001) then
-    StepFormat = '%.3f'
-else
-    StepFormat = '%.4f'
+for i = 1, 10 do 
+    StepFormat = '%.' .. i .. 'f'
+    if (StepFormat:format(Step) == tostring(Step)) then
+        break
+    end
 end
 
 local Slider = Utilities:Create("Frame", {
@@ -1026,7 +976,7 @@ SliderButton.MouseButton1Down:Connect(function()
     MouseMove = Mouse.Move:Connect(function()
         local Px = Utilities:GetXY(SliderOuter)
         local ScaledValue = Px * (Info.Maximum - Info.Minimum) + Info.Minimum
-        local RoundedValue = math.floor((ScaledValue + Info.Incrementation / 2) / Info.Incrementation) * Info.Incrementation
+        local RoundedValue = Utilities:Round(ScaledValue, Info.Incrementation)
         local FinalValue = math.clamp(RoundedValue, Info.Minimum, Info.Maximum)
         local SizeX = (FinalValue - Info.Minimum) / (Info.Maximum - Info.Minimum)
         Utilities:Tween(SliderInner, {Size = UDim2.new(SizeX,0,1,0)}, 0.09)
