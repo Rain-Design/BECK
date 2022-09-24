@@ -17,12 +17,6 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 --//
 
---// Assets //--
-local Assets = {
-
-}
---//
-
 --// Utilities Functions //--
 function Utilities:Create(type, properties, children)
 assert(type, "first argument is required.")
