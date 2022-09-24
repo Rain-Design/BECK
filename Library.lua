@@ -106,7 +106,7 @@ function Utilities:Tooltip(instance, string)
         Size = UDim2.fromOffset(6, 26)
     }, {
         Utilities:Create("UICorner", {
-            CornerRadius = UDim.new(0, 4)
+            CornerRadius = UDim.new(0, 5)
         }),
         Utilities:Create("Frame", {
             Name = "TooltipFrame",
@@ -1110,7 +1110,6 @@ local Input = Utilities:Create("Frame", {
     Size = UDim2.new(0, 205, 0, 27),
     Parent = SectionContainer,
     BackgroundTransparency = 1,
-    ZIndex = 3
 }, {
     Utilities:Create("Frame", {
         Name = "InputFrame",
