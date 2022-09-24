@@ -1123,6 +1123,7 @@ local Input = Utilities:Create("Frame", {
             Name = "InputTextBox",
             PlaceholderText = Info.Text,
             PlaceholderColor3 = Color3.fromRGB(170, 170, 170),
+            TextColor3 = Color3.fromRGB(195, 195, 195),
             TextXAlignment = Enum.TextXAlignment.Center,
             BackgroundTransparency = 1,
             Size = UDim2.fromScale(1, 1)
