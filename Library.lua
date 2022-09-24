@@ -95,6 +95,79 @@ local ScreenGui = Utilities:Create("ScreenGui", {
 })
 --//
 
+function Utilities:Tooltip(instance, string)
+    local Tooltip = Utilities:Create("Frame", {
+        Name = "Tooltip",
+        Parent = ScreenGui,
+        ZIndex = 10,
+        Visible = false,
+        AnchorPoint = Vector2.new(.5, .5),
+        BackgroundColor3 = Color3.fromRGB(14, 14, 14),
+        Size = UDim2.fromOffset(6, 26)
+    }, {
+        Utilities:Create("UICorner", {
+            CornerRadius = UDim.new(0, 4)
+        }),
+        Utilities:Create("Frame", {
+            Name = "TooltipFrame",
+            Size = UDim2.fromOffset(0, 20),
+            AnchorPoint = Vector2.new(.5, .5),
+            Position = UDim2.fromScale(.5, .5),
+            BackgroundTransparency = 1,
+            ZIndex = 11
+        }, {
+            Utilities:Create("TextLabel", {
+                Name = "TooltipText",
+                Size = UDim2.fromOffset(6, 26),
+                AnchorPoint = Vector2.new(.5, .5),
+                Position = UDim2.fromScale(.5, .5),
+                BackgroundTransparency = 1,
+                TextXAlignment = Enum.TextXAlignment.Center,
+                Text = string,
+                ZIndex = 11
+            }),
+            Utilities:Create("UIStroke", {
+                Color = Color3.fromRGB(25, 25, 25)
+            }),
+            Utilities:Create("UICorner", {
+                CornerRadius = UDim.new(0, 5)
+            })
+        })
+    })
+
+    local MouseMove
+
+    local TooltipFrame = Tooltip.TooltipFrame
+    local TextX = TooltipFrame.TooltipText.TextBounds.X
+
+    Tooltip.Size = Tooltip.Size + UDim2.fromOffset(TextX + 6, 0)
+    TooltipFrame.Size = TooltipFrame.Size + UDim2.fromOffset(TextX + 6, 0)
+    TooltipFrame.TooltipText.Size = TooltipFrame.TooltipText.Size + UDim2.fromOffset(TextX + 6, 0)
+
+    local function Update()
+        local MousePosition = Utilities:GetMouseLocation()
+
+        Tooltip.Position = UDim2.new(0, MousePosition.X + 3, 0, MousePosition.Y)
+    end
+
+    instance.MouseEnter:Connect(function()
+        Tooltip.Visible = true
+
+        MouseMove = Mouse.Move:Connect(function()
+            Update()
+        end)
+    end)
+
+    instance.MouseLeave:Connect(function()
+        Tooltip.Visible = false
+
+        if MouseMove then
+            MouseMove:Disconnect()
+            MouseMove = nil
+        end
+    end)
+end
+
 --// Window //--
 function Library:Window(Info)
 Info.Keybind = Info.Keybind or Enum.KeyCode.LeftAlt
@@ -128,7 +201,7 @@ local Window = Utilities:Create("Frame", {
         Size = UDim2.new(0, 200, 0 , 490)
     }, {
         Utilities:Create("UICorner", {
-            CornerRadius = UDim.new(0, 5)
+            CornerRadius = UDim.new(0, 4)
         }),
         Utilities:Create("Frame", {
             Name = "BorderFrame",
@@ -424,6 +497,7 @@ end)
 
 function Sections:Button(Info)
 Info.Text = Info.Text or "Button"
+Info.Tooltip = Info.Tooltip or nil
 Info.Callback = Info.Callback or function() end
 
 local Button = Utilities:Create("Frame", {
@@ -461,6 +535,10 @@ local Button = Utilities:Create("Frame", {
     })
 })
 
+if Info.Tooltip then
+    Utilities:Tooltip(Check, Info.Tooltip)
+end
+
 Button.ButtonFrame.MouseEnter:Connect(function()
     Utilities:Tween(Button.ButtonFrame.ButtonText, {TextColor3 = Color3.fromRGB(215, 215, 215)})
     Utilities:Tween(Button.ButtonFrame, {BackgroundColor3 = Color3.fromRGB(23, 23, 23)})
@@ -495,6 +573,7 @@ function Sections:Check(Info)
 Info.Text = Info.Text or  "Check"
 Info.Default = Info.Default or false
 Info.Flag = Info.Flag or nil
+Info.Tooltip = Info.Tooltip or nil
 Info.Callback = Info.Callback or function() end
 
 local Checks = {}
@@ -546,6 +625,10 @@ local Check = Utilities:Create("Frame", {
         })
     })
 })
+
+if Info.Tooltip then
+    Utilities:Tooltip(Check, Info.Tooltip)
+end
 
 local CheckButton = Check.CheckFrame.CheckButton
 local CheckText = Check.CheckFrame.CheckText
@@ -605,6 +688,7 @@ Info.Text = Info.Text or "Dropdown"
 Info.Flag = Info.Flag or nil
 Info.Default = Info.Default or nil
 Info.List = Info.List or {}
+Info.Tooltip = Info.Tooltip or nil
 Info.ChangeText = Info.ChangeText or true
 Info.MultiSelect = Info.MultiSelect or false
 Info.Callback = Info.Callback or function() end
@@ -685,6 +769,10 @@ local Dropdown = Utilities:Create("Frame", {
         })
     })
 })
+
+if Info.Tooltip then
+    Utilities:Tooltip(Dropdown, Info.Tooltip)
+end
 
 local DropdownContainer = Dropdown.DropdownFrame.DropdownContainer
 local DropdownButton = Dropdown.DropdownFrame.DropdownButton
@@ -862,6 +950,7 @@ end
 function Sections:Slider(Info)
 Info.Text = Info.Text or "Slider"
 Info.Flag = Info.Flag or nil
+Info.Tooltip = Info.Tooltip or nil
 Info.Default = Info.Default or 5
 Info.Minimum = Info.Minimum or 0
 Info.Maximum = Info.Maximum or 10
@@ -944,6 +1033,10 @@ local Slider = Utilities:Create("Frame", {
         })
     })
 })
+
+if Info.Tooltip then
+    Utilities:Tooltip(Slider, Info.Tooltip)
+end
 
 local SliderOuter = Slider.SliderFrame
 local SliderInner = SliderOuter.SliderInner
