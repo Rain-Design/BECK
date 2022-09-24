@@ -536,7 +536,7 @@ local Button = Utilities:Create("Frame", {
 })
 
 if Info.Tooltip then
-    Utilities:Tooltip(Check, Info.Tooltip)
+    Utilities:Tooltip(Button.ButtonFrame, Info.Tooltip)
 end
 
 Button.ButtonFrame.MouseEnter:Connect(function()
@@ -958,8 +958,6 @@ Info.Incrementation = Info.Incrementation or 1
 Info.Postfix = Info.Postfix or ""
 Info.Callback = Info.Callback or function() end
 
-local Sliders = {}
-
 if Info.Minimum > Info.Maximum then
     local ValueBefore = Info.Minimum
     Info.Minimum, Info.Maximum = Info.Maximum, ValueBefore
@@ -1035,7 +1033,7 @@ local Slider = Utilities:Create("Frame", {
 })
 
 if Info.Tooltip then
-    Utilities:Tooltip(Slider, Info.Tooltip)
+    Utilities:Tooltip(Slider.SliderFrame, Info.Tooltip)
 end
 
 local SliderOuter = Slider.SliderFrame
@@ -1099,8 +1097,83 @@ SliderButton.MouseButton1Down:Connect(function()
         end
     end)
 end)
+end
 
-return Sliders
+function Sections:Input(Info)
+Info.Text = Info.Text or "Input"
+Info.Flag = Info.Flag or nil
+Info.Tooltip = Info.Tooltip or nil
+Info.Callback = Info.Callback or function() end
+
+local Input = Utilities:Create("Frame", {
+    Name = "Input",
+    Size = UDim2.new(0, 205, 0, 27),
+    Parent = SectionContainer,
+    BackgroundTransparency = 1,
+    ZIndex = 3
+}, {
+    Utilities:Create("Frame", {
+        Name = "InputFrame",
+        BackgroundColor3 = Color3.fromRGB(21, 21, 21),
+        Position = UDim2.fromOffset(3, 2),
+        ClipsDescendants = true,
+        Size = UDim2.fromOffset(199, 23),
+    }, {
+        Utilities:Create("TextBox", {
+            Name = "InputTextBox",
+            PlaceholderText = Info.Text,
+            PlaceholderColor3 = Color3.fromRGB(170, 170, 170),
+            TextXAlignment = Enum.TextXAlignment.Center,
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(1, 1)
+        }),
+        Utilities:Create("UICorner", {
+            CornerRadius = UDim.new(0, 2)
+        }),
+        Utilities:Create("UIStroke", {
+            Color = Color3.fromRGB(25, 25, 25)
+        })
+    })
+})
+
+if Info.Tooltip then
+    Utilities:Tooltip(Input.InputFrame, Info.Tooltip)
+end
+
+local Activated = false
+
+Input.InputFrame.MouseEnter:Connect(function()
+    if not Activated then
+        Utilities:Tween(Input.InputFrame, {BackgroundColor3 = Color3.fromRGB(23, 23, 23)})
+        Utilities:Tween(Input.InputFrame.UIStroke, {Color = Color3.fromRGB(29, 29, 29)})
+    end
+end)
+
+Input.InputFrame.MouseLeave:Connect(function()
+    if not Activated then
+        Utilities:Tween(Input.InputFrame.UIStroke, {Color = Color3.fromRGB(25, 25, 25)})
+        Utilities:Tween(Input.InputFrame, {BackgroundColor3 = Color3.fromRGB(21, 21, 21)})
+    end
+end)
+
+Input.InputFrame.InputTextBox.Focused:Connect(function()
+    Activated = true
+
+    Utilities:Tween(Input.InputFrame, {BackgroundColor3 = Color3.fromRGB(23, 23, 23)})
+    Utilities:Tween(Input.InputFrame.UIStroke, {Color = Color3.fromRGB(29, 29, 29)})
+end)
+
+Input.InputFrame.InputTextBox.FocusLost:Connect(function()
+    task.spawn(Info.Callback, Input.InputFrame.InputTextBox.Text)
+    if Info.Flag ~= nil then
+		Library.Flags[Info.Flag] = Input.InputFrame.InputTextBox.Text
+	end
+
+    Activated = false
+
+    Utilities:Tween(Input.InputFrame.UIStroke, {Color = Color3.fromRGB(25, 25, 25)})
+    Utilities:Tween(Input.InputFrame, {BackgroundColor3 = Color3.fromRGB(21, 21, 21)})
+end)
 end
 
 return Sections
