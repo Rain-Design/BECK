@@ -169,6 +169,8 @@ local Notification = Utilities:Create("Frame", {
     })
 })
 
+local Closed = false
+
 local TextX = Notification.NotificationFrame.NotificationText.TextBounds.X
 
 Utilities:Tween(Notification, {Size = UDim2.fromOffset(TextX + 12, 30)}, .3, Enum.EasingStyle.Quad)
@@ -180,6 +182,7 @@ task.spawn(function()
 end)
 
 local function Close()
+    Closed = true
     local Tween = Utilities:Tween(Notification, {Size = UDim2.fromOffset(0, 30)}, .3, Enum.EasingStyle.Quad)
     Tween.Completed:Connect(function()
         task.wait(.1)
@@ -189,7 +192,9 @@ end
 
 if Info.Timeout then
     task.delay(Info.Timeout, function()
-        Close()
+        if not Closed then
+            Close()
+        end
     end)
 end
 
