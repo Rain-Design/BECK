@@ -15,6 +15,7 @@ local BlacklistedKeys = {Enum.KeyCode.Backspace, Enum.KeyCode.Tab, Enum.KeyCode.
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local TextService = game:GetService("TextService")
 --//
 
 --// Utilities Functions //--
@@ -90,10 +91,92 @@ end
 local ScreenGui = Utilities:Create("ScreenGui", {
     Name = "BECK",
     ZIndexBehavior = Enum.ZIndexBehavior.Global,
-    DisplayOrder = 9e9,
+    DisplayOrder = 500,
     Parent = CoreGui
 })
+
+local NotificationScreen = Utilities:Create("ScreenGui", {
+    Name = "BECKNotifications",
+    ZIndexBehavior = Enum.ZIndexBehavior.Global,
+    DisplayOrder = 501,
+    Parent = CoreGui
+}, {
+    Utilities:Create("Frame", {
+        Name = "NotificationHolder",
+        Size = UDim2.fromScale(1, 1),
+        BackgroundTransparency = 1
+    }, {
+        Utilities:Create("UIListLayout", {
+            HorizontalAlignment = Enum.HorizontalAlignment.Right,
+            VerticalAlignment = Enum.VerticalAlignment.Bottom,
+            Padding = UDim.new(0, 3)
+        }),
+        Utilities:Create("UIPadding", {
+            PaddingRight = UDim.new(0, 5),
+            PaddingBottom = UDim.new(0, 5)
+        })
+    })
+})
+
 --//
+
+function Library:Notification(Info)
+Info.Text = Info.Text or "Lorem Ipsum"
+Info.Timeout = Info.Timeout or 2
+
+local Notification = Utilities:Create("Frame", {
+    Name = "Notification",
+    Parent = NotificationScreen.NotificationHolder,
+    AnchorPoint = Vector2.new(.5, .5),
+    ClipsDescendants = true,
+    Size = UDim2.fromOffset(0, 30),
+    BackgroundColor3 = Color3.fromRGB(14, 14, 14)
+}, {
+    Utilities:Create("UICorner", {
+        CornerRadius = UDim.new(0, 6)
+    }),
+    Utilities:Create("Frame", {
+        Name = "NotificationFrame",
+        Size = UDim2.new(1, -6, 1, -6),
+        AnchorPoint = Vector2.new(.5, .5),
+        Position = UDim2.fromScale(.5, .5),
+        BackgroundTransparency = 1
+    }, {
+        Utilities:Create("UIStroke", {
+            Color = Color3.fromRGB(25, 25, 25)
+        }),
+        Utilities:Create("UICorner", {
+            CornerRadius = UDim.new(0, 6)
+        }),
+        Utilities:Create("TextLabel", {
+            Name = "NotificationText",
+            Text = Info.Text,
+            TextXAlignment = Enum.TextXAlignment.Center,
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(1, 1)
+        })
+    })
+})
+
+local TextX = Notification.NotificationFrame.NotificationText.TextBounds.X
+
+Utilities:Tween(Notification, {Size = UDim2.fromOffset(TextX + 12, 30)}, .3, Enum.EasingStyle.Quad)
+task.spawn(function()
+    task.wait(.1)
+    Utilities:Tween(Notification.NotificationFrame.UIStroke, {Color = Color3.fromRGB(31, 156, 100)}, .3, Enum.EasingStyle.Linear)
+    task.wait(.3)
+    Utilities:Tween(Notification.NotificationFrame.UIStroke, {Color = Color3.fromRGB(25, 25, 25)}, .6, Enum.EasingStyle.Linear)
+end)
+
+task.delay(Info.Timeout, function()
+    local Tween = Utilities:Tween(Notification, {Size = UDim2.fromOffset(0, 30)}, .3, Enum.EasingStyle.Quad)
+    Tween.Completed:Connect(function()
+        task.wait(.1)
+        Notification:Destroy()
+    end)
+end)
+
+end
 
 function Utilities:Tooltip(instance, string)
     local Tooltip = Utilities:Create("Frame", {
