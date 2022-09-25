@@ -122,7 +122,7 @@ local NotificationScreen = Utilities:Create("ScreenGui", {
 
 function Library:Notification(Info)
 Info.Text = Info.Text or "Lorem Ipsum"
-Info.Timeout = Info.Timeout or 2
+Info.Timeout = Info.Timeout or nil
 
 local Notification = Utilities:Create("Frame", {
     Name = "Notification",
@@ -132,6 +132,17 @@ local Notification = Utilities:Create("Frame", {
     Size = UDim2.fromOffset(0, 30),
     BackgroundColor3 = Color3.fromRGB(14, 14, 14)
 }, {
+    Utilities:Create("Frame", {
+        Name = "BlackoutFrame",
+        Size = UDim2.fromScale(1, 1),
+        BackgroundColor3 = Color3.fromRGB(14, 14, 14),
+        BackgroundTransparency = 1,
+        ZIndex = 2
+    }, {
+        Utilities:Create("UICorner", {
+            CornerRadius = UDim.new(0, 6)
+        })
+    }),
     Utilities:Create("UICorner", {
         CornerRadius = UDim.new(0, 6)
     }),
@@ -168,12 +179,32 @@ task.spawn(function()
     Utilities:Tween(Notification.NotificationFrame.UIStroke, {Color = Color3.fromRGB(25, 25, 25)}, .6, Enum.EasingStyle.Linear)
 end)
 
-task.delay(Info.Timeout, function()
+local function Close()
     local Tween = Utilities:Tween(Notification, {Size = UDim2.fromOffset(0, 30)}, .3, Enum.EasingStyle.Quad)
     Tween.Completed:Connect(function()
         task.wait(.1)
         Notification:Destroy()
     end)
+end
+
+if Info.Timeout then
+    task.delay(Info.Timeout, function()
+        Close()
+    end)
+end
+
+Notification.MouseEnter:Connect(function()
+    Utilities:Tween(Notification.BlackoutFrame, {BackgroundTransparency = .3}, .3, Enum.EasingStyle.Quad)
+end)
+
+Notification.MouseLeave:Connect(function()
+    Utilities:Tween(Notification.BlackoutFrame, {BackgroundTransparency = 1}, .3, Enum.EasingStyle.Quad)
+end)
+
+Notification.InputBegan:Connect(function(Input)
+    if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+        Close()
+    end
 end)
 
 end
