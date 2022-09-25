@@ -400,7 +400,7 @@ Right.Visible = true
 
 Utilities:Tween(Tab.IconHolder, {BackgroundColor3 = Color3.fromRGB(26, 194, 118)})
 Utilities:Tween(Tab.IconHolder.Icon, {ImageColor3 = Color3.fromRGB(255, 255, 255)})
-Utilities:Tween(Tab.TabText, {TextColor3 = Color3.fromRGB(195, 195, 195)})
+Utilities:Tween(Tab.TabText, {TextColor3 = Color3.fromRGB(205, 205, 205)})
 end
 
 if Windows.Tabs == 1 then
@@ -517,7 +517,7 @@ local Button = Utilities:Create("Frame", {
             Name = "ButtonText",
             Size = UDim2.fromScale(1, 1),
             Text = Info.Text,
-            TextColor3 = Color3.fromRGB(195, 195, 195),
+            TextColor3 = Color3.fromRGB(205, 205, 205),
             BackgroundTransparency = 1,
             TextXAlignment = Enum.TextXAlignment.Center
         }),
@@ -546,7 +546,7 @@ Button.ButtonFrame.MouseEnter:Connect(function()
 end)
 
 Button.ButtonFrame.MouseLeave:Connect(function()
-    Utilities:Tween(Button.ButtonFrame.ButtonText, {TextColor3 = Color3.fromRGB(195, 195, 195)})
+    Utilities:Tween(Button.ButtonFrame.ButtonText, {TextColor3 = Color3.fromRGB(205, 205, 205)})
     Utilities:Tween(Button.ButtonFrame.UIStroke, {Color = Color3.fromRGB(25, 25, 25)})
     Utilities:Tween(Button.ButtonFrame, {BackgroundColor3 = Color3.fromRGB(21, 21, 21)})
 end)
@@ -602,7 +602,7 @@ local Check = Utilities:Create("Frame", {
         Utilities:Create("TextLabel", {
             Name = "CheckText",
             BackgroundTransparency = 1,
-            TextColor3 = Color3.fromRGB(195, 195, 195),
+            TextColor3 = Color3.fromRGB(205, 205, 205),
             Text = Info.Text,
             AnchorPoint = Vector2.new(0, .5),
             Size = UDim2.fromScale(1, 1),
@@ -745,7 +745,7 @@ local Dropdown = Utilities:Create("Frame", {
             Size = UDim2.fromOffset(167, 23),
             ClipsDescendants = true,
             Position = UDim2.fromOffset(6, 0),
-            TextColor3 = Color3.fromRGB(195, 195, 195),
+            TextColor3 = Color3.fromRGB(205, 205, 205),
             ZIndex = 3
         }),
         Utilities:Create("TextButton", {
@@ -758,7 +758,7 @@ local Dropdown = Utilities:Create("Frame", {
             Name = "DropdownIcon",
             Size = UDim2.fromOffset(14, 14),
             BackgroundTransparency = 1,
-            ImageColor3 = Color3.fromRGB(195, 195, 195),
+            ImageColor3 = Color3.fromRGB(205, 205, 205),
             Position = UDim2.fromOffset(181, 5),
             Image = "rbxassetid://7733717447",
             ZIndex = 3
@@ -812,7 +812,7 @@ Dropdown.DropdownFrame.MouseEnter:Connect(function()
 end)
 
 Dropdown.DropdownFrame.MouseLeave:Connect(function()
-    Utilities:Tween(Dropdown.DropdownFrame.DropdownText, {TextColor3 = Color3.fromRGB(195, 195, 195)})
+    Utilities:Tween(Dropdown.DropdownFrame.DropdownText, {TextColor3 = Color3.fromRGB(205, 205, 205)})
     Utilities:Tween(Dropdown.DropdownFrame.UIStroke, {Color = Color3.fromRGB(25, 25, 25)})
     Utilities:Tween(Dropdown.DropdownFrame, {BackgroundColor3 = Color3.fromRGB(21, 21, 21)})
 end)
@@ -1002,7 +1002,7 @@ local Slider = Utilities:Create("Frame", {
             Position = UDim2.fromOffset(6, 0),
             Size = UDim2.fromScale(1, 1),
             Text = Info.Text,
-            TextColor3 = Color3.fromRGB(195, 195, 195),
+            TextColor3 = Color3.fromRGB(205, 205, 205),
             BackgroundTransparency = 1,
             ZIndex = 2
         }),
@@ -1012,7 +1012,7 @@ local Slider = Utilities:Create("Frame", {
             Size = UDim2.fromScale(1, 1),
             Text = StepFormat:format(Rounded)..Info.Postfix,
             TextXAlignment = Enum.TextXAlignment.Right,
-            TextColor3 = Color3.fromRGB(195, 195, 195),
+            TextColor3 = Color3.fromRGB(205, 205, 205),
             BackgroundTransparency = 1,
             ZIndex = 2
         }),
@@ -1043,7 +1043,7 @@ SliderOuter.MouseEnter:Connect(function()
 end)
 
 SliderOuter.MouseLeave:Connect(function()
-    Utilities:Tween(SliderOuter.SliderText, {TextColor3 = Color3.fromRGB(195, 195, 195)})
+    Utilities:Tween(SliderOuter.SliderText, {TextColor3 = Color3.fromRGB(205, 205, 205)})
     Utilities:Tween(SliderOuter.UIStroke, {Color = Color3.fromRGB(25, 25, 25)})
     Utilities:Tween(SliderOuter, {BackgroundColor3 = Color3.fromRGB(21, 21, 21)})
 end)
@@ -1118,7 +1118,7 @@ local Input = Utilities:Create("Frame", {
             Name = "InputTextBox",
             PlaceholderText = Info.Text,
             PlaceholderColor3 = Color3.fromRGB(170, 170, 170),
-            TextColor3 = Color3.fromRGB(195, 195, 195),
+            TextColor3 = Color3.fromRGB(205, 205, 205),
             TextXAlignment = Enum.TextXAlignment.Center,
             BackgroundTransparency = 1,
             Size = UDim2.fromScale(1, 1)
