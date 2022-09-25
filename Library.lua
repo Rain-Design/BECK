@@ -606,6 +606,7 @@ local Check = Utilities:Create("Frame", {
     Utilities:Create("TextButton", {
         Name = "KeybindButton",
         BackgroundTransparency = 1,
+        Visible = Info.Keybind and true or false,
         AnchorPoint = Vector2.new(1, .5),
         Position = UDim2.new(1, -3, .5, 0),
         Size = UDim2.fromOffset(0, 23),
@@ -656,7 +657,6 @@ if Info.Tooltip then
 end
 
 local CheckButton = Check.CheckFrame.CheckButton
-local CheckText = Check.CheckFrame.CheckText
 local CheckIcon = Check.CheckFrame.CheckIcon
 
 local KeybindText = Check.KeybindKeyText
@@ -704,6 +704,7 @@ CheckButton.MouseButton1Click:Connect(function()
 Checks:Set(not State)
 end)
 
+if Info.Keybind then
 Check.KeybindButton.MouseButton1Click:Connect(function()
     if Debounce then return end
     
@@ -711,7 +712,7 @@ Check.KeybindButton.MouseButton1Click:Connect(function()
 
     KeybindText.Text = "[...]"
 
-    local KeybindTextX = KeybindText.TextBounds.X
+    KeybindTextX = KeybindText.TextBounds.X
     Check.KeybindButton.Size = UDim2.fromOffset(KeybindTextX, 23)
     
     local Listening
@@ -721,7 +722,7 @@ Check.KeybindButton.MouseButton1Click:Connect(function()
             PressKey = Input.KeyCode
             KeybindText.Text = string.format(Format, PressKey.Name)
 
-            local KeybindTextX = KeybindText.TextBounds.X
+            KeybindTextX = KeybindText.TextBounds.X
             Check.KeybindButton.Size = UDim2.fromOffset(KeybindTextX, 23)
     
             task.wait(.1)
@@ -737,6 +738,7 @@ Check.KeybindButton.MouseButton1Click:Connect(function()
             Checks:Set(not State)
         end
     end)
+end
 
 return Checks
 end
