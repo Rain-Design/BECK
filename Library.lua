@@ -9,7 +9,7 @@ local Utilities = {}
 
 local Mouse = game.Players.LocalPlayer:GetMouse()
 
-local ViewportSize = workspace.CurrentCamera.ViewportSize
+local BlacklistedKeys = {Enum.KeyCode.Backspace, Enum.KeyCode.Tab, Enum.KeyCode.CapsLock, Enum.KeyCode.W, Enum.KeyCode.A, Enum.KeyCode.S, Enum.KeyCode.D, Enum.KeyCode.KeypadEnter, Enum.KeyCode.Return, Enum.KeyCode.Escape}
 
 --// Services //--
 local CoreGui = game:GetService("CoreGui")
@@ -572,6 +572,7 @@ end
 function Sections:Check(Info)
 Info.Text = Info.Text or  "Check"
 Info.Default = Info.Default or false
+Info.Keybind = Info.Keybind or nil
 Info.Flag = Info.Flag or nil
 Info.Tooltip = Info.Tooltip or nil
 Info.Callback = Info.Callback or function() end
@@ -580,12 +581,36 @@ local Checks = {}
 
 local State = false
 
+local PressKey = Info.Keybind or Enum.KeyCode.End
+local Debounce = false
+
+local Format = "[%s]"
+
 local Check = Utilities:Create("Frame", {
     Name = "Check",
     Size = UDim2.new(0, 205, 0, 27),
     Parent = SectionContainer,
     BackgroundTransparency = 1
 }, {
+    Utilities:Create("TextLabel", {
+        Name = "KeybindKeyText",
+        Position = UDim2.fromOffset(3, 2),
+        TextXAlignment = Enum.TextXAlignment.Right,
+        TextColor3 = Color3.fromRGB(165, 165, 165),
+        Visible = Info.Keybind and true or false,
+        Text = string.format(Format, PressKey.Name),
+        BackgroundTransparency = 1,
+        Size = UDim2.fromOffset(199, 23),
+        ZIndex = 2
+    }),
+    Utilities:Create("TextButton", {
+        Name = "KeybindButton",
+        BackgroundTransparency = 1,
+        AnchorPoint = Vector2.new(1, .5),
+        Position = UDim2.new(1, -3, .5, 0),
+        Size = UDim2.fromOffset(0, 23),
+        ZIndex = 2
+    }),
     Utilities:Create("Frame", {
         Name = "CheckFrame",
         Size = UDim2.fromOffset(20, 20),
@@ -634,6 +659,11 @@ local CheckButton = Check.CheckFrame.CheckButton
 local CheckText = Check.CheckFrame.CheckText
 local CheckIcon = Check.CheckFrame.CheckIcon
 
+local KeybindText = Check.KeybindKeyText
+
+local KeybindTextX = KeybindText.TextBounds.X
+Check.KeybindButton.Size = UDim2.fromOffset(KeybindTextX, 23)
+
 CheckButton.MouseEnter:Connect(function()
     if not State then
         Utilities:Tween(Check.CheckFrame, {BackgroundColor3 = Color3.fromRGB(23, 23, 23)})
@@ -671,10 +701,42 @@ if Info.Default then
 end
 
 CheckButton.MouseButton1Click:Connect(function()
-State = not State
-
-Checks:Set(State)
+Checks:Set(not State)
 end)
+
+Check.KeybindButton.MouseButton1Click:Connect(function()
+    if Debounce then return end
+    
+    Debounce = true
+
+    KeybindText.Text = "[...]"
+
+    local KeybindTextX = KeybindText.TextBounds.X
+    Check.KeybindButton.Size = UDim2.fromOffset(KeybindTextX, 23)
+    
+    local Listening
+    
+    Listening = UserInputService.InputBegan:Connect(function(Input)
+        if not table.find(BlacklistedKeys, Input.KeyCode) then
+            PressKey = Input.KeyCode
+            KeybindText.Text = string.format(Format, PressKey.Name)
+
+            local KeybindTextX = KeybindText.TextBounds.X
+            Check.KeybindButton.Size = UDim2.fromOffset(KeybindTextX, 23)
+    
+            task.wait(.1)
+            Debounce = false
+            Listening:Disconnect()
+        end
+    end)
+    end)
+    
+    UserInputService.InputBegan:Connect(function(Input)
+        if Debounce then return end
+        if Input.KeyCode == PressKey then
+            Checks:Set(not State)
+        end
+    end)
 
 return Checks
 end
@@ -1105,14 +1167,14 @@ local Input = Utilities:Create("Frame", {
     Name = "Input",
     Size = UDim2.new(0, 205, 0, 27),
     Parent = SectionContainer,
-    BackgroundTransparency = 1,
+    BackgroundTransparency = 1
 }, {
     Utilities:Create("Frame", {
         Name = "InputFrame",
         BackgroundColor3 = Color3.fromRGB(21, 21, 21),
         Position = UDim2.fromOffset(3, 2),
         ClipsDescendants = true,
-        Size = UDim2.fromOffset(199, 23),
+        Size = UDim2.fromOffset(199, 23)
     }, {
         Utilities:Create("TextBox", {
             Name = "InputTextBox",
@@ -1170,6 +1232,80 @@ Input.InputFrame.InputTextBox.FocusLost:Connect(function()
     Utilities:Tween(Input.InputFrame.UIStroke, {Color = Color3.fromRGB(25, 25, 25)})
     Utilities:Tween(Input.InputFrame, {BackgroundColor3 = Color3.fromRGB(21, 21, 21)})
 end)
+end
+
+function Sections:Keybind(Info)
+Info.Text = Info.Text or "Keybind"
+Info.Default = Info.Default or Enum.KeyCode.End
+Info.Callback = Info.Callback or function() end
+
+local PressKey = Info.Default
+
+local Debounce = false
+
+local Format = "[%s]"
+
+local Keybind = Utilities:Create("Frame", {
+    Name = "Keybind",
+    Size = UDim2.new(0, 205, 0, 27),
+    Parent = SectionContainer,
+    BackgroundTransparency = 1
+}, {
+    Utilities:Create("TextButton", {
+        Name = "KeybindButton",
+        Size = UDim2.fromScale(1, 1),
+        BackgroundTransparency = 1
+    }),
+    Utilities:Create("TextLabel", {
+        Name = "KeybindText",
+        Position = UDim2.fromOffset(3, 2),
+        Text = Info.Text,
+        TextColor3 = Color3.fromRGB(205, 205, 205),
+        BackgroundTransparency = 1,
+        Size = UDim2.fromOffset(199, 23)
+    }),
+    Utilities:Create("TextLabel", {
+        Name = "KeybindKeyText",
+        Position = UDim2.fromOffset(3, 2),
+        TextXAlignment = Enum.TextXAlignment.Right,
+        TextColor3 = Color3.fromRGB(165, 165, 165),
+        Text = string.format(Format, PressKey.Name),
+        BackgroundTransparency = 1,
+        Size = UDim2.fromOffset(199, 23)
+    })
+})
+
+local KeybindButton = Keybind.KeybindButton
+local KeybindKeyText = Keybind.KeybindKeyText
+
+KeybindButton.MouseButton1Click:Connect(function()
+if Debounce then return end
+
+Debounce = true
+
+KeybindKeyText.Text = "[...]"
+
+local Listening
+
+Listening = UserInputService.InputBegan:Connect(function(Input)
+    if not table.find(BlacklistedKeys, Input.KeyCode) then
+        PressKey = Input.KeyCode
+        KeybindKeyText.Text = string.format(Format, PressKey.Name)
+
+        task.wait(.1)
+        Debounce = false
+        Listening:Disconnect()
+    end
+end)
+end)
+
+UserInputService.InputBegan:Connect(function(Input)
+    if Debounce then return end
+    if Input.KeyCode == PressKey then
+        task.spawn(Info.Callback)
+    end
+end)
+
 end
 
 return Sections
