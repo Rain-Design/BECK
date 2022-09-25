@@ -191,6 +191,7 @@ local Window = Utilities:Create("Frame", {
         Name = "Containers",
         Size = UDim2.new(0, 431, 0, 480),
         BackgroundTransparency = 1,
+        ClipsDescendants = false,
         Position = UDim2.new(0, 213, 0, 10)
     }),
     Utilities:Create("Frame", {
@@ -221,6 +222,7 @@ local Window = Utilities:Create("Frame", {
             Name = "TabContainer",
             BackgroundTransparency = 1,
             Position = UDim2.new(0, 5, 0, 10),
+            ClipsDescendants = false,
             Size = UDim2.new(1, -10, 1, -15)
         }, {
             Utilities:Create("UIListLayout")
@@ -341,6 +343,7 @@ local Left = Utilities:Create("ScrollingFrame", {
     Name = "Left",
     Size = UDim2.new(0, 215, 1, 0),
     Parent = Containers,
+    ClipsDescendants = false,
     Visible = false,
     BackgroundTransparency = 1
 }, {
@@ -355,6 +358,7 @@ local Right = Utilities:Create("ScrollingFrame", {
     Size = UDim2.new(0, 215, 1, 0),
     Position = UDim2.new(0, 220, 0, 0),
     Parent = Containers,
+    ClipsDescendants = false,
     Visible = false,
     BackgroundTransparency = 1
 }, {
@@ -807,7 +811,6 @@ local Dropdown = Utilities:Create("Frame", {
             BackgroundTransparency = 1,
             Text = Info.Text,
             Size = UDim2.fromOffset(167, 23),
-            ClipsDescendants = true,
             Position = UDim2.fromOffset(6, 0),
             TextColor3 = Color3.fromRGB(205, 205, 205),
             ZIndex = 3
@@ -1238,6 +1241,7 @@ end
 
 function Sections:Keybind(Info)
 Info.Text = Info.Text or "Keybind"
+Info.Tooltip = Info.Tooltip or nil
 Info.Default = Info.Default or Enum.KeyCode.End
 Info.Callback = Info.Callback or function() end
 
@@ -1276,6 +1280,10 @@ local Keybind = Utilities:Create("Frame", {
         Size = UDim2.fromOffset(199, 23)
     })
 })
+
+if Info.Tooltip then
+    Utilities:Tooltip(Keybind, Info.Tooltip)
+end
 
 local KeybindButton = Keybind.KeybindButton
 local KeybindKeyText = Keybind.KeybindKeyText
