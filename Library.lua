@@ -656,12 +656,10 @@ function Checks:Set(bool)
     end
 
     if State then
-        Utilities:Tween(CheckText, {TextColor3 = Color3.fromRGB(255, 255, 255)})
         Utilities:Tween(CheckIcon, {ImageTransparency = 0})
         Utilities:Tween(Check.CheckFrame, {BackgroundColor3 = Color3.fromRGB(23, 23, 23)})
         Utilities:Tween(Check.CheckFrame.UIStroke, {Color = Color3.fromRGB(29, 29, 29)})
         else
-        Utilities:Tween(CheckText, {TextColor3 = Color3.fromRGB(195, 195, 195)})
         Utilities:Tween(CheckIcon, {ImageTransparency = 1})
         Utilities:Tween(Check.CheckFrame.UIStroke, {Color = Color3.fromRGB(25, 25, 25)})
         Utilities:Tween(Check.CheckFrame, {BackgroundColor3 = Color3.fromRGB(21, 21, 21)})
