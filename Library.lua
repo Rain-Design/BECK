@@ -611,6 +611,7 @@ local Section = Utilities:Create("Frame", {
 })
 
 local SectionContainer = Section.SectionContainer
+local SectionFrame = Section.SectionFrame
 
 SectionContainer.ChildAdded:Connect(function()
     SectionHolder.Size = UDim2.fromOffset(211, SectionHolder.Size.Y.Offset + 27)
@@ -1443,46 +1444,23 @@ Info.Text = Info.Text or "Color Picker"
 Info.Default = Info.Default or Color3.fromRGB(255, 0, 0)
 Info.Callback = Info.Callback or function() end
 
+local State = false
+
+local ColorPickers = {}
+
 local H = 0
 local S = 1
 local V = 1
 
-local Color
+local Color = Color3.fromHSV(H, S, V)
 
-local ColorPicker = Utilities:Create("Frame", {
-    Name = "ColorPicker",
-    Size = UDim2.new(0, 205, 0, 27),
-    Parent = SectionContainer,
-    BackgroundTransparency = 1
-}, {
-    Utilities:Create("TextLabel", {
-        Name = "ColorPickerText",
-        Position = UDim2.fromOffset(3, 2),
-        Text = Info.Text,
-        TextColor3 = Color3.fromRGB(205, 205, 205),
-        BackgroundTransparency = 1,
-        Size = UDim2.fromOffset(199, 23)
-    }, {
-        Utilities:Create("TextButton", {
-            Name = "ColorPickerButton",
-            Size = UDim2.fromOffset(199, 27),
-            BackgroundTransparency = 1
-        })
-    }),
-    Utilities:Create("Frame", {
-        Name = "ColorPickerFrame",
-        Size = UDim2.fromOffset(20, 20),
-        Position = UDim2.fromOffset(182, 4),
-        BackgroundColor3 = Info.Default
-    }, {
-        Utilities:Create("UICorner", {
-            CornerRadius = UDim.new(0, 4)
-        })
-    })
-})
+local R = Color.R * 255
+local G = Color.G * 255
+local B = Color.B * 255
 
 
 
+return ColorPickers
 end
 
 return Sections
