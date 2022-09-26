@@ -120,7 +120,7 @@ local NotificationScreen = Utilities:Create("ScreenGui", {
 
 --//
 
-function Library:Notification(Info)
+function Library:Notify(Info)
 Info.Text = Info.Text or "Lorem Ipsum"
 Info.Timeout = Info.Timeout or nil
 
@@ -129,6 +129,7 @@ local Notification = Utilities:Create("Frame", {
     Parent = NotificationScreen.NotificationHolder,
     AnchorPoint = Vector2.new(.5, .5),
     ClipsDescendants = true,
+    Active = true,
     Size = UDim2.fromOffset(0, 30),
     BackgroundColor3 = Color3.fromRGB(14, 14, 14)
 }, {
@@ -770,7 +771,7 @@ local Check = Utilities:Create("Frame", {
         Utilities:Create("TextButton", {
             Name = "CheckButton",
             BackgroundTransparency = 1,
-            Size = UDim2.fromOffset(205, 20)
+            Size = UDim2.fromOffset(205, 27)
         })
     })
 })
@@ -787,14 +788,14 @@ local KeybindText = Check.KeybindKeyText
 local KeybindTextX = KeybindText.TextBounds.X
 Check.KeybindButton.Size = UDim2.fromOffset(KeybindTextX, 23)
 
-CheckButton.MouseEnter:Connect(function()
+Check.MouseEnter:Connect(function()
     if not State then
         Utilities:Tween(Check.CheckFrame, {BackgroundColor3 = Color3.fromRGB(23, 23, 23)})
         Utilities:Tween(Check.CheckFrame.UIStroke, {Color = Color3.fromRGB(29, 29, 29)})
     end
 end)
 
-CheckButton.MouseLeave:Connect(function()
+Check.MouseLeave:Connect(function()
     if not State then
         Utilities:Tween(Check.CheckFrame.UIStroke, {Color = Color3.fromRGB(25, 25, 25)})
         Utilities:Tween(Check.CheckFrame, {BackgroundColor3 = Color3.fromRGB(21, 21, 21)})
@@ -1434,6 +1435,53 @@ UserInputService.InputBegan:Connect(function(Input)
         task.spawn(Info.Callback)
     end
 end)
+
+end
+
+function Sections:ColorPicker(Info)
+Info.Text = Info.Text or "Color Picker"
+Info.Default = Info.Default or Color3.fromRGB(255, 0, 0)
+Info.Callback = Info.Callback or function() end
+
+local H = 0
+local S = 1
+local V = 1
+
+local Color
+
+local ColorPicker = Utilities:Create("Frame", {
+    Name = "ColorPicker",
+    Size = UDim2.new(0, 205, 0, 27),
+    Parent = SectionContainer,
+    BackgroundTransparency = 1
+}, {
+    Utilities:Create("TextLabel", {
+        Name = "ColorPickerText",
+        Position = UDim2.fromOffset(3, 2),
+        Text = Info.Text,
+        TextColor3 = Color3.fromRGB(205, 205, 205),
+        BackgroundTransparency = 1,
+        Size = UDim2.fromOffset(199, 23)
+    }, {
+        Utilities:Create("TextButton", {
+            Name = "ColorPickerButton",
+            Size = UDim2.fromOffset(199, 27),
+            BackgroundTransparency = 1
+        })
+    }),
+    Utilities:Create("Frame", {
+        Name = "ColorPickerFrame",
+        Size = UDim2.fromOffset(20, 20),
+        Position = UDim2.fromOffset(182, 4),
+        BackgroundColor3 = Info.Default
+    }, {
+        Utilities:Create("UICorner", {
+            CornerRadius = UDim.new(0, 4)
+        })
+    })
+})
+
+
 
 end
 
