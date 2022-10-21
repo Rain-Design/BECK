@@ -11,6 +11,8 @@ local Mouse = game.Players.LocalPlayer:GetMouse()
 
 local BlacklistedKeys = {Enum.KeyCode.Backspace, Enum.KeyCode.Tab, Enum.KeyCode.CapsLock, Enum.KeyCode.W, Enum.KeyCode.A, Enum.KeyCode.S, Enum.KeyCode.D, Enum.KeyCode.KeypadEnter, Enum.KeyCode.Return, Enum.KeyCode.Escape}
 
+local DropIndex = 9999
+
 --// Services //--
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
@@ -896,7 +898,7 @@ local Dropdown = Utilities:Create("Frame", {
     Size = UDim2.new(0, 205, 0, 27),
     Parent = SectionContainer,
     BackgroundTransparency = 1,
-    ZIndex = 3
+    ZIndex = DropIndex
 }, {
     Utilities:Create("Frame", {
         Name = "DropdownFrame",
@@ -904,7 +906,7 @@ local Dropdown = Utilities:Create("Frame", {
         Position = UDim2.fromOffset(3, 2),
         ClipsDescendants = true,
         Size = UDim2.fromOffset(199, 23),
-        ZIndex = 3
+        ZIndex = DropIndex
     }, {
         Utilities:Create("UICorner", {
             CornerRadius = UDim.new(0, 2)
@@ -920,7 +922,7 @@ local Dropdown = Utilities:Create("Frame", {
             ScrollingEnabled = false,
             TopImage = "",
             Position = UDim2.fromOffset(0, 23),
-            ZIndex = 3
+            ZIndex = DropIndex
         }, {
             Utilities:Create("UIListLayout")
         }),
@@ -934,13 +936,13 @@ local Dropdown = Utilities:Create("Frame", {
             Size = UDim2.fromOffset(167, 23),
             Position = UDim2.fromOffset(6, 0),
             TextColor3 = Color3.fromRGB(205, 205, 205),
-            ZIndex = 3
+            ZIndex = DropIndex
         }),
         Utilities:Create("TextButton", {
             Name = "DropdownButton",
             Size = UDim2.fromOffset(199, 23),
             BackgroundTransparency = 1,
-            ZIndex = 3
+            ZIndex = DropIndex
         }),
         Utilities:Create("ImageLabel", {
             Name = "DropdownIcon",
@@ -949,10 +951,12 @@ local Dropdown = Utilities:Create("Frame", {
             ImageColor3 = Color3.fromRGB(205, 205, 205),
             Position = UDim2.fromOffset(181, 5),
             Image = "rbxassetid://7733717447",
-            ZIndex = 3
+            ZIndex = DropIndex
         })
     })
 })
+
+DropIndex = DropIndex - 1
 
 if Info.Tooltip then
     Utilities:Tooltip(Dropdown, Info.Tooltip)
@@ -1340,6 +1344,7 @@ Input.InputFrame.MouseLeave:Connect(function()
     end
 end)
 
+local Activated = false
 Input.InputFrame.InputTextBox.Focused:Connect(function()
     Activated = true
 
