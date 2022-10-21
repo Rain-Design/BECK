@@ -956,8 +956,6 @@ local Dropdown = Utilities:Create("Frame", {
     })
 })
 
-DropIndex = DropIndex - 1
-
 if Info.Tooltip then
     Utilities:Tooltip(Dropdown, Info.Tooltip)
 end
@@ -1085,7 +1083,7 @@ local DropdownElement = Utilities:Create("Frame", {
     Size = UDim2.fromOffset(199, 27),
     Parent = DropdownContainer,
     BackgroundTransparency = 1,
-    ZIndex = 3
+    ZIndex = DropIndex
 }, {
     Utilities:Create("TextLabel", {
         Name = "DropdownElementText",
@@ -1094,13 +1092,13 @@ local DropdownElement = Utilities:Create("Frame", {
         BackgroundTransparency = 1,
         Position = UDim2.fromOffset(6, 0),
         TextColor3 = Color3.fromRGB(209, 209, 209),
-        ZIndex = 3
+        ZIndex = DropIndex
     }),
     Utilities:Create("TextButton", {
         Name = "DropdownElementButton",
         Size = UDim2.fromScale(1, 1),
         BackgroundTransparency = 1,
-        ZIndex = 3
+        ZIndex = DropIndex
     })
 })
 
@@ -1131,6 +1129,8 @@ DropdownButton.MouseButton1Click:Connect(function()
 
     Dropdowns:Toggle(State)
 end)
+
+DropIndex = DropIndex - 1
 
 return Dropdowns
 end
