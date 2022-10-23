@@ -641,7 +641,7 @@ local Label = Utilities:Create("Frame", {
         Text = Info.Text,
         AnchorPoint = Vector2.new(0, .5),
         Size = UDim2.fromScale(1, 1),
-        Position = UDim2.new(0, 6, .5, 0)
+        Position = UDim2.new(0, 3, .5, 0)
     })
 })
 
