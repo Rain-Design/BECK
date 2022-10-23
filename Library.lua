@@ -622,6 +622,40 @@ SectionContainer.ChildAdded:Connect(function()
     Section.SectionFrame.Size = UDim2.fromOffset(205, Section.SectionFrame.Size.Y.Offset + 27)
 end)
 
+function Sections:Label(Info)
+Info.Text = Info.Text or "Label"
+Info.Color = Info.Color or Color3.fromRGB(205, 205, 205)
+
+local Labels = {}
+
+local Label = Utilities:Create("Frame", {
+    Name = "Label",
+    Size = UDim2.new(0, 205, 0, 27),
+    Parent = SectionContainer,
+    BackgroundTransparency = 1
+}, {
+    Utilities:Create("TextLabel", {
+        Name = "LabelText",
+        BackgroundTransparency = 1,
+        TextColor3 = Info.Color,
+        Text = Info.Text,
+        AnchorPoint = Vector2.new(0, .5),
+        Size = UDim2.fromScale(1, 1),
+        Position = UDim2.new(0, 26, .5, 0)
+    })
+})
+
+function Labels:Set(Info2)
+Info2.Text = Info2.Text or Label.LabelText.Text
+Info2.Color = Info2.Color or Label.LabelText.TextColor3
+
+Label.LabelText.Text = Info2.Text
+Label.LabelText.TextColor3 = Info2.Color
+end
+
+return Labels
+end
+
 function Sections:Button(Info)
 Info.Text = Info.Text or "Button"
 Info.Tooltip = Info.Tooltip or nil
