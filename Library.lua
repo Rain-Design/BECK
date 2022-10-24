@@ -221,7 +221,7 @@ function Utilities:Tooltip(instance, string)
     local Tooltip = Utilities:Create("Frame", {
         Name = "Tooltip",
         Parent = ScreenGui,
-        ZIndex = 1000,
+        ZIndex = 10000,
         Visible = false,
         AnchorPoint = Vector2.new(.5, .5),
         BackgroundColor3 = Color3.fromRGB(14, 14, 14),
@@ -236,7 +236,7 @@ function Utilities:Tooltip(instance, string)
             AnchorPoint = Vector2.new(.5, .5),
             Position = UDim2.fromScale(.5, .5),
             BackgroundTransparency = 1,
-            ZIndex = 1001
+            ZIndex = 10001
         }, {
             Utilities:Create("TextLabel", {
                 Name = "TooltipText",
@@ -246,7 +246,7 @@ function Utilities:Tooltip(instance, string)
                 BackgroundTransparency = 1,
                 TextXAlignment = Enum.TextXAlignment.Center,
                 Text = string,
-                ZIndex = 1001
+                ZIndex = 10001
             }),
             Utilities:Create("UIStroke", {
                 Color = Color3.fromRGB(25, 25, 25)
@@ -1496,8 +1496,6 @@ local Color = Color3.fromHSV(H, S, V)
 local R = Color.R * 255
 local G = Color.G * 255
 local B = Color.B * 255
-
-
 
 return ColorPickers
 end
