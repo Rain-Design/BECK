@@ -1194,7 +1194,9 @@ local DefaultScale = (Rounded - Info.Minimum) / (Info.Maximum - Info.Minimum)
 local StepFormat = "%d"
 local Step = Info.Incrementation
 
-for i = 1, 10 do 
+for i = 1, 10 do
+    if Step == 1 then break end
+    
     StepFormat = '%.' .. i .. 'f'
     if StepFormat:format(Step) == tostring(Step) then
         break
