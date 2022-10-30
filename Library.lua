@@ -967,7 +967,8 @@ local Dropdown = Utilities:Create("Frame", {
             Name = "DropdownText",
             BackgroundTransparency = 1,
             Text = Info.Text,
-            Size = UDim2.fromOffset(167, 23),
+            Size = UDim2.fromOffset(168, 23),
+            ClipsDescendants = true,
             Position = UDim2.fromOffset(6, 0),
             TextColor3 = Color3.fromRGB(205, 205, 205),
             ZIndex = DropIndex
@@ -1496,6 +1497,8 @@ local Color = Color3.fromHSV(H, S, V)
 local R = Color.R * 255
 local G = Color.G * 255
 local B = Color.B * 255
+
+
 
 return ColorPickers
 end
